@@ -40,10 +40,13 @@ export async function POST(req: NextRequest) {
     // Use the OpenAI client to get completions
     console.log(`Input text: ${inputText}`)
     const messages: ChatRequestMessage[] = [
-      { role: "system", content: "You are a helpful assistant. You will talk like a pirate." },
+      { role: "system", content: "You are a helpful assistant. Be efficient, accurate, and concise." },
       { role: "user", content: inputText },
     ];
-    const completionsResponse = await oaiClient.getChatCompletions(deploymentId, messages);
+    const options = {
+      maxTokens: 100,
+    };
+    const completionsResponse = await oaiClient.getChatCompletions(deploymentId, messages, options);
 
     let message: string;
     if (completionsResponse.choices[0] && completionsResponse.choices[0].message && completionsResponse.choices[0].message.content) {
@@ -54,7 +57,7 @@ export async function POST(req: NextRequest) {
       console.log('No response text available');
     }
     // Use the response from the API to generate the next frame
-    
+
     // const message = inputText ?? "";
     const imageUrl = `${process.env["HOST"]}/api/images/echo?date=${Date.now()}&message=${message}`;
     return new NextResponse(
