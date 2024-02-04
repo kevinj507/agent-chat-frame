@@ -18,7 +18,7 @@ const oaiClient = new OpenAIClient(AZURE_ENDPOINT, new AzureKeyCredential(AZURE_
 
 const deploymentId = "35turbo";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, res: NextResponse) {
   interface ApiResponse {
     message: string;
   }
@@ -64,38 +64,51 @@ export async function POST(req: NextRequest) {
     let postUrl;
     if (buttonIndex == 1) {
       postUrl = `${process.env["HOST"]}/api/echo`;
+      const imageUrl = `${process.env["HOST"]}/api/images/echo?date=${Date.now()}&message=${message}`;
+      return new NextResponse(
+        `<!DOCTYPE html>
+        <html>
+          <head>
+            <title>GPT Says:</title>
+            <meta property="og:title" content="GPT Says:" />
+            <meta property="og:image" content="${imageUrl}" />
+            <meta name="fc:frame" content="vNext" />
+            <meta name="fc:frame:image" content="${imageUrl}" />
+            <meta name="fc:frame:input:text" content="Type something here..." />
+            <meta name="fc:frame:button:1:action" content="post" />
+            <meta name="fc:frame:post_url" content="${postUrl}" />
+            <meta name="fc:frame:button:1" content="🗣️ Chat" />
+            <meta name="fc:frame:button:2" content="Learn more" />
+            <meta name="fc:frame:button:2:action" content="post_redirect" />
+          </head>
+          <body>
+  <p>GPT RESPONSE </p>
+          </body
+        </html>`,
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "text/html",
+          },
+        }
+      );
     } else {
       postUrl = `${process.env["HOST"]}/api/code`;
+       // Construct the redirect URL using the dynamic part
+      const redirectUrl = `https://warpcast.com/operator`;
+      res.headers.set("Location", redirectUrl);
+      // Set the status code to 302 for a temporary redirect and end the response
+      return NextResponse.redirect(redirectUrl);
+      // res.setHeader("Location", redirectUrl);
+
+      // // Set the status code to 302 for a temporary redirect and end the response
+      // res.status(302).end();
     }
 
-    const imageUrl = `${process.env["HOST"]}/api/images/echo?date=${Date.now()}&message=${message}`;
-    return new NextResponse(
-      `<!DOCTYPE html>
-      <html>
-        <head>
-          <title>GPT Says:</title>
-          <meta property="og:title" content="GPT Says:" />
-          <meta property="og:image" content="${imageUrl}" />
-          <meta name="fc:frame" content="vNext" />
-          <meta name="fc:frame:image" content="${imageUrl}" />
-          <meta name="fc:frame:input:text" content="Type something here..." />
-          <meta name="fc:frame:button:1:action" content="post" />
-          <meta name="fc:frame:post_url" content="${postUrl}" />
-          <meta name="fc:frame:button:1" content="🗣️ Chat" />
-          <meta name="fc:frame:button:2" content="Learn more" />
-          <meta name="fc:frame:button:2:action" content="post_redirect" />
-        </head>
-        <body>
-<p>GPT RESPONSE </p>
-        </body
-      </html>`,
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "text/html",
-        },
-      }
-    );
+    
+
+
+  
   } else {
     console.log("validate not ok")
     return new NextResponse("Unauthorized", { status: 401 });
