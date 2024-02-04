@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
   const {
     untrustedData: { inputText },
     trustedData: { messageBytes },
+    buttonIndex: {buttonIndex}
   } = await req.json();
   const frameMessage = Message.decode(Buffer.from(messageBytes, "hex"));
   const validateResult = await hubClient.validateMessage(frameMessage);
@@ -60,7 +61,12 @@ export async function POST(req: NextRequest) {
     }
     // Use the response from the API to generate the next frame
 
-    const testUrl = `${process.env["HOST"]}/api/echo`;
+    let postUrl;
+    if (buttonIndex == 1) {
+      postUrl = `${process.env["HOST"]}/api/echo`;
+    } else {
+      postUrl = `${process.env["HOST"]}/api/code`;
+    }
 
     const imageUrl = `${process.env["HOST"]}/api/images/echo?date=${Date.now()}&message=${message}`;
     return new NextResponse(
@@ -74,8 +80,10 @@ export async function POST(req: NextRequest) {
           <meta name="fc:frame:image" content="${imageUrl}" />
           <meta name="fc:frame:input:text" content="Type something here..." />
           <meta name="fc:frame:button:1:action" content="post" />
-          <meta name="fc:frame:post_url" content="${testUrl}" />
+          <meta name="fc:frame:post_url" content="${postUrl}" />
           <meta name="fc:frame:button:1" content="🗣️ Chat" />
+          <meta name="fc:frame:button:2" content="Learn more" />
+          <meta name="fc:frame:button:2:action" content="post_redirect" />
         </head>
         <body>
 <p>GPT RESPONSE </p>
