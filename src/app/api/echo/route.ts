@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
           <meta name="fc:frame:input:text" content="Type something here..." />
           <meta name="fc:frame:button:1:action" content="post" />
           <meta name="fc:frame:post_url" content="${testUrl}" />
-          <meta name="fc:frame:button:1" content="ð£ï¸ Chat" />
+          <meta name="fc:frame:button:1" content="🗣️ Chat" />
         </head>
         <body>
 <p>GPT RESPONSE </p>
