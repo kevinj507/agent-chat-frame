@@ -1,5 +1,5 @@
 {
-  "name": "agent-chat-frame",
+  "name": "echo-the-dolphin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,20 +9,29 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@devcaster/next": "^0.0.3",
+    "@azure/openai": "^1.0.0-beta.11",
+    "@farcaster/hub-nodejs": "^0.10.23",
+    "dotenv": "^16.4.1",
     "next": "14.1.0",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.26.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "satori": "^0.10.11",
+    "sharp": "^0.33.2"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/node-fetch": "^2.6.11",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "postcss": "^8",
+    "prettier": "^3.2.4",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vercel": "^33.3.0"
   }
 }

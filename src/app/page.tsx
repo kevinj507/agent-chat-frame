@@ -1,16 +1,31 @@
-import { FrameConfig, Frame, FrameButton, FrameImage } from "@devcaster/next/frames";
+import { Metadata } from "next";
+import Echo from "@/app/components/Echo";
 
-export default function Home({ searchParams }: { searchParams: Record<string, string>; }) {
-    const frame = new FrameConfig<{ count: number }>({ count: 0 }, searchParams);
+const postUrl = `${process.env["HOST"]}/api/echo`;
 
-    return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <Frame frame={frame}>
-                <FrameButton onClick={(f: FrameConfig<{ count: number }>) => { f.state.count -= 1; }}>-</FrameButton>
-                <FrameButton onClick={(f: FrameConfig<{ count: number }>) => { f.state.count += 1; }}>+</FrameButton>
-                <FrameImage src={`${process.env.BASE_URL}/image?count=${frame.state.count}`} />
-            </Frame>
-            {/* Rest of your code */}
-        </main>
-    );
+export async function generateMetadata(): Promise<Metadata> {
+  const imageUrl = `${process.env["HOST"]}/api/images/start?date=${Date.now()}`;
+  return {
+    title: "Echo the Dolphin",
+    description: "Type something and Echo will say it back!",
+    openGraph: {
+      title: "Echo the Dolphin",
+      images: [imageUrl],
+    },
+    other: {
+      "fc:frame": "vNext",
+      "fc:frame:image": imageUrl,
+      "fc:frame:post_url": postUrl,
+      "fc:frame:input:text": "Type something here...",
+      "fc:frame:button:1": "ð¬ Echo",
+    },
+  };
+}
+
+export default function Home() {
+  return (
+    <main className="flex flex-col text-center lg:p-16">
+      <Echo />
+    </main>
+  );
 }
