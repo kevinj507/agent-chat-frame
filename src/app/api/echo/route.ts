@@ -24,9 +24,8 @@ export async function POST(req: NextRequest) {
   }
 
   const {
-    untrustedData: { inputText },
+    untrustedData: { inputText, buttonIndex },
     trustedData: { messageBytes },
-    buttonIndex: {buttonIndex}
   } = await req.json();
   console.log(`Button index: ${buttonIndex}`)
   const frameMessage = Message.decode(Buffer.from(messageBytes, "hex"));
