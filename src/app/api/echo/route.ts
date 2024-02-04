@@ -10,11 +10,12 @@ const AZURE_ENDPOINT = process.env["AZURE_ENDPOINT"];
 const AZURE_KEY = process.env["AZURE_KEY"];
 
 if (!AZURE_ENDPOINT || !AZURE_KEY) {
+  console.log("no endpoint or key")
   throw new Error("Azure endpoint and key must be defined");
 }
 
 const oaiClient = new OpenAIClient(AZURE_ENDPOINT, new AzureKeyCredential(AZURE_KEY));
-const postUrl = `${process.env["HOST"]}/api/code`;
+
 const deploymentId = "35turbo";
 
 export async function POST(req: NextRequest) {
@@ -34,6 +35,7 @@ export async function POST(req: NextRequest) {
     let urlBuffer = validMessage?.data?.frameActionBody?.url ?? [];
     const urlString = Buffer.from(urlBuffer).toString("utf-8");
     if (!urlString.startsWith(process.env["HOST"] ?? "")) {
+      console.log("url doesnt start with host")
       return new NextResponse("Bad Request", { status: 400 });
     }
 
@@ -58,22 +60,26 @@ export async function POST(req: NextRequest) {
     }
     // Use the response from the API to generate the next frame
 
-    // const message = inputText ?? "";
+    const testUrl = `${process.env["HOST"]}/api/echo`;
+
     const imageUrl = `${process.env["HOST"]}/api/images/echo?date=${Date.now()}&message=${message}`;
     return new NextResponse(
       `<!DOCTYPE html>
       <html>
         <head>
-          <title>Echo Says:</title>
-          <meta property="og:title" content="Echo Says:" />
+          <title>GPT Says:</title>
+          <meta property="og:title" content="GPT Says:" />
           <meta property="og:image" content="${imageUrl}" />
           <meta name="fc:frame" content="vNext" />
-          <meta name="fc:frame:post_url" content="${postUrl}" />
           <meta name="fc:frame:image" content="${imageUrl}" />
-          <meta name="fc:frame:button:1" content="See code" />
-          <meta name="fc:frame:button:1:action" content="post_redirect" />
+          <meta name="fc:frame:input:text" content="Type something here..." />
+          <meta name="fc:frame:button:1:action" content="post" />
+          <meta name="fc:frame:post_url" content="${testUrl}" />
+          <meta name="fc:frame:button:1" content="ð£ï¸ Chat" />
         </head>
-        <body/>
+        <body>
+<p>GPT RESPONSE </p>
+        </body
       </html>`,
       {
         status: 200,
@@ -83,6 +89,7 @@ export async function POST(req: NextRequest) {
       }
     );
   } else {
+    console.log("validate not ok")
     return new NextResponse("Unauthorized", { status: 401 });
   }
 }

@@ -28,7 +28,7 @@ export async function GET() {
             objectFit: "cover", // Cover the area without losing aspect ratio
             width: "35%", // Image takes up 40% of the container's width
           }}
-          src="https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/2639523a-690b-47af-16ab-ca07697fd000/original"
+          src="https://cdn.betakit.com/wp-content/uploads/2023/03/open-ai-770x513.jpg"
         />
         <div
           style={{
@@ -53,7 +53,7 @@ export async function GET() {
               display: "flex"
             }}
           >
-            <strong>Echo The Dolphin</strong>
+            <strong>FrameGPT</strong>
           </div>
           <div
             style={{
@@ -61,7 +61,7 @@ export async function GET() {
               overflow: "hidden",
             }}
           >
-            Type something in the text input below and Echo will say it back.
+            Type something in the text input below and GPT will respond.
           </div>
         </div>
       </div>
