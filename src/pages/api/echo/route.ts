@@ -26,7 +26,7 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
     const {
       untrustedData: { inputText, buttonIndex },
       trustedData: { messageBytes },
-    } = await req.body;
+    } = req.body;
     console.log(`Button index: ${buttonIndex}`)
     const frameMessage = Message.decode(Buffer.from(messageBytes, "hex"));
     const validateResult = await hubClient.validateMessage(frameMessage);
