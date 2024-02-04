@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
 
 export async function POST() {
-    return NextResponse.redirect("https://github.com/horsefacts/echo-the-dolphin", {status: 302});
+    return NextResponse.redirect("https://warpcast.com/operator", {status: 302});
 }
