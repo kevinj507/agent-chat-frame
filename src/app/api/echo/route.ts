@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
     trustedData: { messageBytes },
     buttonIndex: {buttonIndex}
   } = await req.json();
+  console.log(`Button index: ${buttonIndex}`)
   const frameMessage = Message.decode(Buffer.from(messageBytes, "hex"));
   const validateResult = await hubClient.validateMessage(frameMessage);
   if (validateResult.isOk() && validateResult.value.valid) {
