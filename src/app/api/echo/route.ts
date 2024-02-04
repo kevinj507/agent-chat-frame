@@ -98,11 +98,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
       const redirectUrl = `https://warpcast.com/operator`;
       res.headers.set("Location", redirectUrl);
       // Set the status code to 302 for a temporary redirect and end the response
-      return NextResponse.redirect(redirectUrl);
-      // res.setHeader("Location", redirectUrl);
+      // return NextResponse.redirect(redirectUrl);
+      // return new NextResponse().redirect(redirectUrl).withStatus(302);
+      return res
 
-      // // Set the status code to 302 for a temporary redirect and end the response
-      // res.status(302).end();
     }
 
     
